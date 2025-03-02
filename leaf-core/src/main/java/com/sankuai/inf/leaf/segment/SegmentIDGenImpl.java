@@ -229,7 +229,7 @@ public class SegmentIDGenImpl implements IDGen {
                         }
                     });
                 }
-                long value = segment.getValue().getAndIncrement();
+                long value = segment.getValue().getAndIncrement(); // todo 最关键的在这里
                 if (value < segment.getMax()) {
                     return new Result(value, Status.SUCCESS);
                 }

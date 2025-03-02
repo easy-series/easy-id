@@ -4,6 +4,7 @@ import com.sankuai.inf.leaf.common.Result;
 import com.sankuai.inf.leaf.common.Status;
 import com.sankuai.inf.leaf.server.exception.LeafServerException;
 import com.sankuai.inf.leaf.server.exception.NoKeyException;
+import com.sankuai.inf.leaf.server.service.SegmentRedisService;
 import com.sankuai.inf.leaf.server.service.SegmentService;
 import com.sankuai.inf.leaf.server.service.SnowflakeService;
 import org.slf4j.Logger;
@@ -21,15 +22,27 @@ public class LeafController {
     private SegmentService segmentService;
     @Autowired
     private SnowflakeService snowflakeService;
+    @Autowired
+    private SegmentRedisService segmentRedisService;
 
     @RequestMapping(value = "/api/segment/get/{key}")
     public String getSegmentId(@PathVariable("key") String key) {
         return get(key, segmentService.getId(key));
     }
 
+    @RequestMapping(value = "/api/segment/redis/get/{key}")
+    public String getSegmentRedisId(@PathVariable String key) {
+        return get(key, segmentRedisService.getId(key));
+    }
+
     @RequestMapping(value = "/api/snowflake/get/{key}")
     public String getSnowflakeId(@PathVariable("key") String key) {
         return get(key, snowflakeService.getId(key));
+    }
+
+    @RequestMapping(value = "/api/segment/redis/metrics")
+    public Object getSegmentRedisMetrics() {
+        return segmentRedisService.getMetrics();
     }
 
     private String get(@PathVariable("key") String key, Result id) {
