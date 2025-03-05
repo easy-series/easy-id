@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    
+    <context:property-placeholder location="classpath:leaf.properties"/>
+    
+    <!-- Redis连接工厂 -->
+    <bean id="lettuceConnectionFactory" class="org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory">
+        <property name="hostName" value="${redis.host}"/>
+        <property name="port" value="${redis.port}"/>
+        <property name="password" value="${redis.password}"/>
+        <property name="database" value="${redis.database}"/>
+    </bean>
+    
+    <!-- Redis模板 -->
+    <bean id="redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="connectionFactory" ref="lettuceConnectionFactory"/>
+        <property name="keySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="valueSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+        <property name="hashKeySerializer">
+            <bean class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+        </property>
+        <property name="hashValueSerializer">
+            <bean class="org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer"/>
+        </property>
+    </bean>
+    
+    <!-- Redis号段配置 -->
+    <bean id="redisSegmentConfig" class="com.sankuai.inf.leaf.segment.redis.RedisSegmentConfig">
+        <property name="step" value="${leaf.redis.segment.step}"/>
+        <property name="updatePercent" value="${leaf.redis.segment.update-percent}"/>
+        <property name="keyPrefix" value="${leaf.redis.segment.key-prefix}"/>
+        <property name="maxStep" value="${leaf.redis.segment.max-step}"/>
+        <property name="minStep" value="${leaf.redis.segment.min-step}"/>
+        <property name="enableAdaptiveStep" value="${leaf.redis.segment.enable-adaptive-step}"/>
+        <property name="stepAdjustWindow" value="${leaf.redis.segment.step-adjust-window}"/>
+    </bean>
+    
+    <!-- Redis号段ID生成器 -->
+    <bean id="redisLeaf" class="com.sankuai.inf.leaf.segment.redis.RedisSegmentIDGenImpl" init-method="init">
+        <constructor-arg ref="redisTemplate"/>
+        <constructor-arg ref="redisSegmentConfig"/>
+    </bean>
+</beans> 
