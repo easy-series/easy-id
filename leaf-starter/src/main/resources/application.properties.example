@@ -1,0 +1,29 @@
+# Leaf ID生成器配置示例
+# 服务名称
+leaf.name=leaf-service
+
+# 号段模式配置
+leaf.segment.enable=true
+leaf.segment.jdbc-url=jdbc:mysql://localhost:3306/leaf?useUnicode=true&characterEncoding=utf8&useSSL=false
+leaf.segment.username=root
+leaf.segment.password=123456
+leaf.segment.driver-class-name=com.mysql.cj.jdbc.Driver
+
+# 雪花算法配置
+leaf.snowflake.enable=false
+leaf.snowflake.zk-address=localhost
+leaf.snowflake.port=2181
+leaf.snowflake.twepoch=1288834974657
+
+# Redis号段模式配置
+leaf.segment-redis.enable=false
+leaf.segment-redis.host=localhost
+leaf.segment-redis.port=6379
+leaf.segment-redis.password=
+leaf.segment-redis.database=0
+leaf.segment-redis.step=1000
+leaf.segment-redis.update-percent=0.9
+leaf.segment-redis.key-prefix=leaf:segment:
+leaf.segment-redis.enable-adaptive-step=true
+leaf.segment-redis.min-step=1000
+leaf.segment-redis.max-step=100000 

@@ -10,7 +10,6 @@
     <modules>
         <module>leaf-core</module>
         <module>leaf-server</module>
-        <module>leaf-client</module>
     </modules>
     <description>Distributed ID Generate Service</description>
     <developers>
